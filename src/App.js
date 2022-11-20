@@ -6,7 +6,7 @@ import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import idl from './genopets_idl';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const connection = new Connection('https://solana-api.projectserum.com');
+const connection = new Connection('https://rpc.ankr.com/solana/');
 const metaplex = Metaplex.make(connection);
 const programId = new PublicKey('HAbiTatJVqoCJd9asyr6RxMEdwtfrQugwp7VAFyKWb1g');
 
@@ -51,10 +51,9 @@ function App() {
           habitatKeys.push(PublicKey.findProgramAddressSync(["habitat-data", nft.mintAddress.toBuffer()], programId)[0]);
         }
       }
-
       // Fetch game data for the habitats
       const habitatDatas = await HabitatData.fetchMultiple(habitatKeys);
-
+console.log(habitatKeys)
       // Add resulting data to habitats dictionary
       for (const habitatData of habitatDatas) {
         habitatData.sequence = habitatData.sequence.toNumber();
@@ -125,18 +124,22 @@ function App() {
 
       // Fetch player data of the tenants
       const playerDataEntries = await PlayerData.fetchMultiple(tenantPlayerDataKeys);
-
-      for (const { player, active, banned, lastHarvestTimestamp } of playerDataEntries) {
+      
+      for (const { player, active, banned, lastHarvestTimestamp ,activeHabitat} of playerDataEntries) {
+       let activehabitats2=  HabitatData.fetch([activeHabitat]);
+       console.log(activehabitats2)
         Object.assign(tenants[player.toBase58()], {
           active,
           banned,
           lastHarvest2: new Date(lastHarvestTimestamp.toNumber() * 1000),
+          activeHabitat: activeHabitat.toString()
         });
       }
 
       setPendingHarvests(pendingHarvests);
       setTenants(tenants);
       setHabitats(habitats);
+      
     } catch(e) {
       alert(e);
     } finally {
@@ -168,7 +171,7 @@ function App() {
       <Row>
         <Col>
           <h2>Habitats</h2>
-          <Table striped bordered hover>
+          <Table striped bordered hover responsive>
             <thead>
               <tr>
                 <th>#</th>
@@ -191,7 +194,7 @@ function App() {
                   <td>{ habitatData.level }</td>
                   <td>{ habitatData.element }</td>
                   <td>{ humanDate(new Date(habitatData.expiryTimestamp * 1000)) }</td>
-                  <td>{ new PublicKey(habitatData.harvester).toBase58() !== PublicKey.default.toBase58() && new PublicKey(habitatData.harvester).toBase58().substring(0, 8) + '...' }</td>
+                  <td>{ new PublicKey(habitatData.harvester).toString() !== PublicKey.default.toString() && new PublicKey(habitatData.harvester).toString() }</td>
                   <td>{ parseFloat((habitatData.harvesterRoyaltyBips / 100).toFixed(2)) }%</td>
                   <td>{ parseFloat((habitatData.totalKiHarvested.toNumber() / 10**9).toFixed(2)) }</td>
                   <td>{ habitatData.durability }</td>
@@ -215,9 +218,10 @@ function App() {
                 <th>Active</th>
                 <th>Last harvest for selected landlord</th>
                 <th>Last harvest</th>
+                <th>Address Habitat</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody> 
               {Object.entries(tenants).map(([id, data], i) => (
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
@@ -227,6 +231,7 @@ function App() {
                   <td>{ data.active ? 'Yes' : 'No' }</td>
                   <td>{ data.lastHarvest.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
                   <td>{ data.lastHarvest2.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
+                  <td>{data.activeHabitat}</td>
                 </tr>
               ))}
             </tbody>
