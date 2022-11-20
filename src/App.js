@@ -14,7 +14,13 @@ const programId = new PublicKey('HAbiTatJVqoCJd9asyr6RxMEdwtfrQugwp7VAFyKWb1g');
 // in a `camelCase` format. Since these are models, they're mapped here in `PascalCase` to
 // distinguish them easily through the code
 const { account: { habitatData: HabitatData, lockedKi: LockedKi, playerData: PlayerData } } = new Program(idl, programId, { connection });
+function convert(str) {
+  var current = new Date(str);
+    
 
+
+  return current.toLocaleString();
+}
 const formReducer = (state, { name, value }) => ({
   ...state,
   [name]: value,
@@ -229,8 +235,8 @@ console.log(habitatKeys)
                   <td>{ parseFloat(data.pendingKi.toFixed(2)) }</td>
                   <td>{ data.banned ? 'Yes' : 'No' }</td>
                   <td>{ data.active ? 'Yes' : 'No' }</td>
-                  <td>{ data.lastHarvest.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
-                  <td>{ data.lastHarvest2.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
+                  <td>{ convert(data.lastHarvest).toString() } </td>
+                  <td>{ convert(data.lastHarvest2).toString() } </td>
                   <td>{data.activeHabitat}</td>
                 </tr>
               ))}
@@ -263,8 +269,8 @@ console.log(habitatKeys)
                   <td>{ parseFloat(harvesterKi.toFixed(2)) }</td>
                   <td>{ parseFloat(landlordKi.toFixed(2)) }</td>
                   <td>{ habitat }</td>
-                  <td>{ startTime.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
-                  <td>{ endTime.toISOString().substring(0, 16).replace('T', ' ') } UTC</td>
+                  <td>{ convert(startTime).toString()}</td>
+                  <td>{ convert(endTime).toString()}</td>
                 </tr>
               ))}
             </tbody>
