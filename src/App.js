@@ -59,7 +59,6 @@ function App() {
       }
       // Fetch game data for the habitats
       const habitatDatas = await HabitatData.fetchMultiple(habitatKeys);
-console.log(habitatKeys)
       // Add resulting data to habitats dictionary
       for (const habitatData of habitatDatas) {
         habitatData.sequence = habitatData.sequence.toNumber();
@@ -133,7 +132,6 @@ console.log(habitatKeys)
       
       for (const { player, active, banned, lastHarvestTimestamp ,activeHabitat} of playerDataEntries) {
        let activehabitats2=  HabitatData.fetch([activeHabitat]);
-       console.log(activehabitats2)
         Object.assign(tenants[player.toBase58()], {
           active,
           banned,
@@ -156,7 +154,6 @@ console.log(habitatKeys)
   const handleChange = ({ target: { name, value }}) => {
     setFormData({ name, value });
   };
-
   const humanDate = date => date.toISOString().substring(0, 16).replace('T', ' ') + ' UTC';
 
   return (
