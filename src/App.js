@@ -231,7 +231,7 @@ console.log(habitatKeys)
               {Object.entries(tenants).map(([id, data], i) => (
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
-                  <td>{ id.substring(0, 8) }...</td>
+                  <td>{ id}</td>
                   <td>{ parseFloat(data.pendingKi.toFixed(2)) }</td>
                   <td>{ data.banned ? 'Yes' : 'No' }</td>
                   <td>{ data.active ? 'Yes' : 'No' }</td>
