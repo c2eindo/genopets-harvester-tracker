@@ -5,7 +5,7 @@ import { Program } from '@project-serum/anchor';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import idl from './genopets_idl';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import axios from 'axios'
 const connection = new Connection('https://rpc.ankr.com/solana/');
 const metaplex = Metaplex.make(connection);
 const programId = new PublicKey('HAbiTatJVqoCJd9asyr6RxMEdwtfrQugwp7VAFyKWb1g');
@@ -51,15 +51,29 @@ function App() {
       const habitats = {};
       // Game data derived keys
       const habitatKeys = [];
-
+      const habitatsids = [];
       for (const nft of nfts) {
         if (nft.symbol === 'HABITAT') {
           habitats[nft.mintAddress.toBase58()] = nft;
+          habitatsids.push(nft.mintAddress.toBase58());
           habitatKeys.push(PublicKey.findProgramAddressSync(["habitat-data", nft.mintAddress.toBuffer()], programId)[0]);
         }
       }
       // Fetch game data for the habitats
+      
       const habitatDatas = await HabitatData.fetchMultiple(habitatKeys);
+      async function fetchHabitatData (id){
+        const data = await axios.get(`https://api.genopets.me/habitat/${id}`);
+        return data.data;
+      }
+      const habitatdataA = [];
+
+      for (const habitatsid of habitatsids ){
+        const data = await fetchHabitatData(habitatsid);
+        habitatdataA.push(data);
+      }
+      setHabitats(habitatdataA);
+      //setHabitats(habitatdataA);
       // Add resulting data to habitats dictionary
       for (const habitatData of habitatDatas) {
         habitatData.sequence = habitatData.sequence.toNumber();
@@ -143,7 +157,7 @@ function App() {
 
       setPendingHarvests(pendingHarvests);
       setTenants(tenants);
-      setHabitats(habitats);
+     // setHabitats(habitats);
       setFilteredData(pendingHarvests);
     } catch(e) {
       alert(e);
@@ -189,7 +203,7 @@ function App() {
                 <th>Name</th>
                 <th>Level</th>
                 <th>Element</th>
-                <th>Expiry timestamp (end of lifespan)</th>
+                <th>(end of lifespan)</th>
                 <th>Harvester</th>
                 <th>Royalty</th>
                 <th>Total KI harvested</th>
@@ -198,18 +212,18 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(habitats).sort(([, a], [, b]) => a.habitatData.sequence > b.habitatData.sequence ? 1 : a.habitatData.sequence < b.habitatData.sequence ? -1 : 0).map(([id, { name, habitatData }], i) => (
+              {Object.entries(habitats).sort(([, a], [, b]) => a.attributes[1].value > b.attributes[1].value ? 1 : a.attributes[1].value < b.attributes[1].value ? -1 : 0).map(([id, { name, attributes }], i) => (
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
                   <td>{ name }</td>
-                  <td>{ habitatData.level }</td>
-                  <td>{ habitatData.element }</td>
-                  <td>{ humanDate(new Date(habitatData.expiryTimestamp * 1000)) }</td>
-                  <td>{ new PublicKey(habitatData.harvester).toString() !== PublicKey.default.toString() && new PublicKey(habitatData.harvester).toString() }</td>
-                  <td>{ parseFloat((habitatData.harvesterRoyaltyBips / 100).toFixed(2)) }%</td>
-                  <td>{ parseFloat((habitatData.totalKiHarvested.toNumber() / 10**9).toFixed(2)) }</td>
-                  <td>{ habitatData.durability }</td>
-                  <td>{ habitatData.habitatsTerraformed }</td>
+                  <td>{ attributes[2].value }</td>
+                  <td>{ attributes[0].value }</td>
+                  <td>{attributes[12].value }</td>
+                  <td>{attributes.length>21?attributes[16].value : attributes[15].value }</td>
+                  <td>{ attributes[9].value}</td>
+                  <td>{ attributes[10].value }</td>
+                  <td>{attributes[13].value }</td>
+                  <td>{ attributes[7].value }</td>
                 </tr>
               ))}
             </tbody>
