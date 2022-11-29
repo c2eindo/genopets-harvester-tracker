@@ -67,9 +67,9 @@ function App() {
         return data.data;
       }
       const habitatdataA = [];
-
       for (const habitatsid of habitatsids ){
         const data = await fetchHabitatData(habitatsid);
+        console.log(data,habitatsid)
         habitatdataA.push(data);
       }
       setHabitats(habitatdataA);
@@ -219,7 +219,7 @@ function App() {
                   <td>{ attributes[2].value }</td>
                   <td>{ attributes[0].value }</td>
                   <td>{attributes[12].value }</td>
-                  <td>{attributes.length>21?attributes[16].value : attributes[15].value }</td>
+                  <td>{attributes.length>25?attributes[15].value:attributes.length>21?attributes[16].value : attributes[15].value }</td>
                   <td>{ attributes[9].value}</td>
                   <td>{ attributes[10].value }</td>
                   <td>{attributes[13].value }</td>
