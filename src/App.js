@@ -32,6 +32,7 @@ function App() {
   const [pendingHarvests, setPendingHarvests] = useState([]);
   const [tenants, setTenants] = useState({});
   const [habitats, setHabitats] = useState({});
+  const [filteredData,setFilteredData] = useState([]);
 
   const handleSumbit = async (event) => {
     event.preventDefault();
@@ -143,14 +144,21 @@ function App() {
       setPendingHarvests(pendingHarvests);
       setTenants(tenants);
       setHabitats(habitats);
-      
+      setFilteredData(pendingHarvests);
     } catch(e) {
       alert(e);
     } finally {
       setSearching(false);
     }
   };
-
+  const handleSearch = (event) => {
+    let value = event.target.value;
+    let result = [];
+    result = pendingHarvests.filter((data) => {
+    return data.player.search(value) != -1;
+    });
+    setFilteredData(result);
+    }
   const handleChange = ({ target: { name, value }}) => {
     setFormData({ name, value });
   };
@@ -243,6 +251,8 @@ function App() {
       </Row>
       <Row>
         <Col>
+        <label>Search:</label>
+        <input type="text" onChange={(event) =>handleSearch(event)} />  
           <h2>Pending harvests</h2>
           <Table striped bordered hover>
             <thead>
@@ -258,7 +268,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {pendingHarvests.map(({ id, player, startTime, endTime, amount, harvesterKi, landlordKi, habitat }, i) => (
+              {filteredData.map(({ id, player, startTime, endTime, amount, harvesterKi, landlordKi, habitat }, i) => (
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
                   <td>{ player}</td>
