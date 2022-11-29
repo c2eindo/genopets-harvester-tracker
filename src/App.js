@@ -261,7 +261,7 @@ function App() {
               {pendingHarvests.map(({ id, player, startTime, endTime, amount, harvesterKi, landlordKi, habitat }, i) => (
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
-                  <td>{ player.substring(0, 8) }...</td>
+                  <td>{ player}</td>
                   <td>{ parseFloat(amount.toFixed(2)) }</td>
                   <td>{ parseFloat(harvesterKi.toFixed(2)) }</td>
                   <td>{ parseFloat(landlordKi.toFixed(2)) }</td>
