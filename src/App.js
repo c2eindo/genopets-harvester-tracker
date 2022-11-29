@@ -284,7 +284,7 @@ function App() {
             <tfoot>
               <tr>
                 <th colSpan={4}>Pending landlord KI</th>
-                <th>{parseFloat(pendingHarvests.reduce((agg, { landlordKi }) => agg + landlordKi, 0).toFixed(2))}</th>
+                <th>{parseFloat(filteredData.reduce((agg, { landlordKi }) => agg + landlordKi, 0).toFixed(2))}</th>
                 <th colSpan={3}>&nbsp;</th>
               </tr>
             </tfoot>
