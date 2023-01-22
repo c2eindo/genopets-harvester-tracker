@@ -216,14 +216,14 @@ function App() {
                 <tr key={ id }>
                   <td>{ i + 1 }</td>
                   <td>{ name }</td>
-                  <td>{ attributes[2].value }</td>
-                  <td>{ attributes[0].value }</td>
-                  <td>{attributes[12].value }</td>
-                  <td>{attributes.length>25?attributes[15].value:attributes.length>21?attributes[16].value : attributes[15].value }</td>
-                  <td>{ attributes[9].value}</td>
-                  <td>{ attributes[10].value }</td>
-                  <td>{attributes[13].value }</td>
-                  <td>{ attributes[7].value }</td>
+                  <td>{ attributes.find(attr => attr.trait_type === "Level").value }</td>
+                  <td>{ attributes.find(attr => attr.trait_type === "Element").value }</td>
+                  <td>{attributes.find(attr => attr.trait_type === "Lifespan").value }</td>
+                  <td>{attributes.find(attr => attr.trait_type === "Harvester").value }</td>
+                  <td>{ attributes.find(attr => attr.trait_type === "Royalty").value}</td>
+                  <td>{ attributes.find(attr => attr.trait_type === "Total Ki Earned").value }</td>
+                  <td>{attributes.find(attr => attr.trait_type === "Durability").value }</td>
+                  <td>{ attributes.find(attr => attr.trait_type === "Seeds Spawned").value }</td>
                 </tr>
               ))}
             </tbody>
