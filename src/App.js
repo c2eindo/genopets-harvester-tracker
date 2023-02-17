@@ -219,7 +219,7 @@ function App() {
                   <td>{ attributes.find(attr => attr.trait_type === "Level").value }</td>
                   <td>{ attributes.find(attr => attr.trait_type === "Element").value }</td>
                   <td>{attributes.find(attr => attr.trait_type === "Lifespan").value }</td>
-                  <td>{attributes.find(attr => attr.trait_type === "Harvester").value }</td>
+                  <td>{attributes.find(attr => attr.trait_type === "Harvester") ? attributes.find(attr => attr.trait_type === "Harvester").value : "no harvester found"}</td>
                   <td>{ attributes.find(attr => attr.trait_type === "Royalty").value}</td>
                   <td>{ attributes.find(attr => attr.trait_type === "Total Ki Earned").value }</td>
                   <td>{attributes.find(attr => attr.trait_type === "Durability").value }</td>
