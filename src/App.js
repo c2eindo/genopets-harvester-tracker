@@ -146,7 +146,7 @@ function App() {
       const playerDataEntries = await PlayerData.fetchMultiple(tenantPlayerDataKeys);
       
       for (const { player, active, banned, lastHarvestTimestamp ,activeHabitat} of playerDataEntries) {
-       let activehabitats2=  HabitatData.fetch([activeHabitat]);
+       let activehabitats =  HabitatData.fetch([activeHabitat]);
         Object.assign(tenants[player.toBase58()], {
           active,
           banned,
@@ -169,7 +169,7 @@ function App() {
     let value = event.target.value;
     let result = [];
     result = pendingHarvests.filter((data) => {
-    return data.player.search(value) != -1;
+    return data.player.search(value) !== -1;
     });
     setFilteredData(result);
     }
